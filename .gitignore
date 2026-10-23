@@ -1,0 +1,43 @@
+# macOS y Windows
+.DS_Store
+.AppleDouble
+Thumbs.db
+Desktop.ini
+
+# Sesiones, historial y archivos locales de R/RStudio
+.Rhistory
+.Rapp.history
+.RData
+.RDataTmp
+.Ruserdata
+.Rproj.user/
+Rplots.pdf
+
+# Cachés y archivos temporales de Quarto / knitr
+.quarto/
+*_cache/
+*_files/
+/.quarto-output/
+
+# Bibliotecas locales de renv (conservar renv.lock y scripts)
+renv/library/
+renv/staging/
+renv/cache/
+renv/local/
+
+# Credenciales y configuración local
+.env
+.env.*
+!.env.example
+.Renviron
+
+# Archivos temporales y de editores
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+~$*
+.vscode/
+.idea/

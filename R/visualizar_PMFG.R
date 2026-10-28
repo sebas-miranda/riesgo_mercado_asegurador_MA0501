@@ -79,7 +79,7 @@ for(tipo in names(resultados)) {
   aristas$y <- nodos$y[aristas$from]
   aristas$xend <- nodos$x[aristas$to]
   aristas$yend <- nodos$y[aristas$to]
-  titulo <- if(tipo=="clasico") "PMFG clásico" else "PMFG por magnitud"
+  titulo <- if(tipo=="clasico") expression(PMFG:~rho[ij]) else expression(PMFG:~abs(rho[ij]))
   grafico <- ggplot(nodos, aes(x, y)) +
     geom_segment(data=aristas,
       aes(x=x, y=y, xend=xend, yend=yend, colour=signo, linetype=signo, linewidth=abs(rho)),

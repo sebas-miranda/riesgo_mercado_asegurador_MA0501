@@ -1,0 +1,206 @@
+---
+title: "Avance 1: proyecto de Análisis Numérico"
+date: "2026-10-27"
+date-format: "D [de] MMMM [de] YYYY"
+lang: es
+format:
+  pdf:
+    pdf-engine: pdflatex
+    documentclass: article
+    papersize: letter
+    fontsize: 11pt
+    geometry:
+      - top=1.8cm
+      - bottom=1.8cm
+      - left=2.1cm
+      - right=2.1cm
+    toc: false
+    number-sections: false
+    colorlinks: false
+    keep-tex: false
+    include-in-header:
+      text: |
+        \usepackage{microtype}
+        \usepackage{float}
+        \usepackage{caption}
+        \captionsetup{font=small,labelfont=bf,skip=4pt}
+        \setlength{\parskip}{4pt}
+        \setlength{\parindent}{0pt}
+        \setlength{\textfloatsep}{9pt}
+        \setlength{\intextsep}{8pt}
+        \raggedbottom
+        \makeatletter
+        \renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+          {1.3ex plus .4ex minus .2ex}{.6ex plus .2ex}%
+          {\normalfont\large\bfseries}}
+        \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+          {1.1ex plus .4ex minus .2ex}{.5ex plus .2ex}%
+          {\normalfont\normalsize\bfseries}}
+        \renewcommand{\maketitle}{%
+          \begin{titlepage}
+          \newgeometry{top=0.8cm,bottom=1.6cm,left=1.2cm,right=1.2cm}
+          \thispagestyle{empty}
+          \noindent\includegraphics[width=8.3cm]{recursos/emat.png}\par
+          \vspace{1.55cm}
+          \begingroup
+          \fontfamily{ptm}\fontsize{12}{16}\selectfont\bfseries
+          \begin{center}
+          Universidad de Costa Rica\par
+          \vspace{1.5cm}
+          Departamento de Ciencias Actuariales\par
+          \vspace{1.5cm}
+          MA0501 Análisis Numérico\par
+          \vspace{1.5cm}
+          Proyecto de investigación:\par
+          \vspace{0.6cm}
+          \begin{minipage}{0.88\textwidth}
+          \centering
+          Estimación y regularización de matrices de dependencia mediante Teoría de Matrices\\
+          Aleatorias (RMT) entre líneas de seguro del mercado costarricense con datos de\\
+          SUGESE.
+          \end{minipage}\par
+          \vspace{0.6cm}
+          {\large Avance 1}\par
+          \vspace{1.3cm}
+          Integrantes:\par
+          \vspace{0.75cm}
+          Sebastián Miranda Ramírez C4H274\par
+          \vspace{0.55cm}
+          Benjamín Gutiérrez Padua C4F813\par
+          \vspace{0.55cm}
+          Kevin David Calderón Martínez C4D511\par
+          \vspace{0.55cm}
+          Gabriel de Jesús Chaves Esquivel C4E273\par
+          \vspace{0.55cm}
+          Miguel Tovar B89795\par
+          \vfill
+          2026\par
+          \vspace{0.9cm}
+          \end{center}
+          \endgroup
+          \end{titlepage}
+          \restoregeometry
+          \setcounter{page}{1}}
+        \makeatother
+execute:
+  enabled: false
+---
+
+## 1. Motivación y planteamiento del proyecto
+
+### 1.1. De la siniestralidad individual a la dependencia colectiva
+
+El análisis de la siniestralidad suele comenzar con la evolución de cada serie: su nivel habitual, su variabilidad y los períodos en que los siniestros aumentan respecto de las primas. Estas características permiten describir una cartera por separado, pero ofrecen información incompleta sobre su comportamiento junto con otras carteras. Dos series con niveles medios distintos pueden registrar aumentos simultáneos; otras, con promedios semejantes, pueden fluctuar en sentidos opuestos.
+
+La dependencia resulta pertinente cuando distintas carteras comparten exposiciones capaces de producir movimientos simultáneos de la siniestralidad. Reconocer esa coincidencia aporta una base descriptiva para examinar la diversificación entre líneas de seguro, la concentración de exposiciones y las necesidades de reaseguro. En el ámbito de la supervisión, también permite preguntar qué partes del mercado presentan dinámicas relacionadas. Estas aplicaciones motivan el estudio; establecer sus consecuencias económicas exige información adicional sobre las carteras y sus exposiciones.
+
+La unidad de análisis es un par aseguradora–ramo, denominado *nodo* e identificado por $i=(a,r)$. Esta elección conserva diferencias que se perderían al resumir toda la actividad de una empresa en una sola serie. Permite estudiar tanto relaciones entre ramos de una misma aseguradora como relaciones entre aseguradoras que operan en un mismo ramo. La pregunta del proyecto es si las fluctuaciones de estos nodos revelan grupos con una dependencia interna característica y cómo distinguir esa estructura de las variaciones debidas al tamaño limitado de la muestra.
+
+### 1.2. El indicador y la construcción de las correlaciones
+
+Para cada nodo $i$ y período $t$, sean $S_{it}$ los siniestros brutos registrados y $P_{it}$ las primas brutas registradas. El indicador observado se define como
+
+$$
+L_{it}=\frac{S_{it}}{P_{it}},\qquad P_{it}\ne0.
+$$
+
+Su interpretación como siniestros por unidad de prima requiere denominadores positivos y partidas contables comparables. El cociente no equivale directamente al índice técnico neto de siniestralidad, que incorpora otros ajustes. Además, las cifras acumuladas deben transformarse en flujos del período antes de calcularlo. Los denominadores negativos o próximos a cero y las observaciones extremas requieren revisión: pueden alterar la distribución del indicador y, con ella, las relaciones estimadas entre series.
+
+Al organizar las observaciones en una matriz $L\in\mathbb{R}^{N\times T}$, cada fila representa un nodo y cada columna un período común. El interés se centra en las desviaciones respecto del comportamiento habitual de cada serie. Centrar y estandarizar las filas permite comparar esas fluctuaciones sin que las diferencias de nivel o de dispersión determinen por sí solas la magnitud de las asociaciones. Esta operación exige varianzas positivas y una cobertura temporal homogénea.
+
+La correlación de Pearson resume la intensidad y el signo de la asociación lineal contemporánea. Su versión poblacional es
+
+$$
+\rho_{ij}=\frac{\operatorname{Cov}(L_i,L_j)}
+{\sqrt{\operatorname{Var}(L_i)\operatorname{Var}(L_j)}}.
+$$
+
+Un signo positivo indica que las desviaciones de ambas series tienden a coincidir; uno negativo, que tienden a contraponerse. Reunir sus estimaciones en una matriz permite estudiar simultáneamente las relaciones de todos los nodos. La simetría de esa matriz expresa una propiedad de la covarianza, sin establecer una dirección de transmisión de pérdidas. Tampoco una correlación elevada demuestra contagio causal, ni un valor próximo a cero descarta otras formas de dependencia.
+
+\newpage
+
+### 1.3. De las asociaciones entre pares a los grupos de series
+
+La matriz de correlaciones describe relaciones entre pares, mientras que el objetivo del proyecto se refiere a conjuntos de nodos. Se busca una organización *mesoscópica*: grupos cuyas fluctuaciones estén relativamente más relacionadas entre sí que con las de otros grupos. Este nivel conecta la dinámica individual con los movimientos generales del mercado. Una colección de correlaciones elevadas no basta para identificarlo; es necesario considerar la relación entre la cohesión interna de cada grupo y sus asociaciones externas.
+
+Esa interpretación también depende de la ventana temporal. Una correlación calculada con toda la muestra resume períodos que pueden tener medias, dispersiones o relaciones distintas. Por ello, puede ocultar cambios en la dependencia y no equivale, en general, al promedio de las correlaciones de los subperíodos. La utilidad del análisis exige examinar la estabilidad temporal y precisar qué intervalo representa la matriz. El filtrado espectral no resuelve por sí solo esta limitación.
+
+Una primera forma de simplificar la matriz consiste en conservar únicamente las correlaciones que superan un umbral común. Sin embargo, ese criterio exige la misma intensidad absoluta a todos los grupos. Puede eliminar las relaciones internas de un conjunto moderadamente correlacionado, aunque sean mayores que sus relaciones con el resto del sistema. Además, pequeñas variaciones del umbral pueden cambiar la red obtenida sin que hayan cambiado los datos.
+
+El árbol de expansión mínima ofrece otra representación: conserva $N-1$ conexiones y mantiene todos los nodos unidos sin formar ciclos. Esa reducción facilita el estudio de jerarquías de similitud, pero también descarta relaciones intensas cuando son redundantes para la conectividad. Su función objetivo no evalúa directamente la cohesión de las comunidades. Como señalan MacMahon y Garlaschelli (2015, secciones II–III), estos procedimientos de filtrado y la detección de grupos responden a preguntas diferentes.
+
+### 1.4. Ruido muestral, estructura colectiva y criterio de agrupación
+
+Incluso cuando las series son independientes entre sí, una muestra finita produce correlaciones distintas de cero. La dificultad aumenta cuando se estima un gran número de relaciones con pocos períodos de observación. En consecuencia, la matriz empírica combina información sobre la dependencia con fluctuaciones propias del muestreo. Su descomposición espectral permite estudiar cómo se distribuye la variación estandarizada entre direcciones de movimiento conjunto, representadas por los vectores propios y ponderadas por sus valores propios.
+
+La teoría de matrices aleatorias proporciona un modelo de referencia para examinar esa distribución. Bajo supuestos específicos sobre la independencia y la estructura temporal de las observaciones, permite comparar el espectro empírico con el que se esperaría por fluctuaciones muestrales. Los modos que exceden la referencia son candidatos a contener estructura adicional. Esta clasificación es relativa al modelo nulo; los modos descartados pueden contener información y los retenidos no identifican por sí solos mecanismos económicos.
+
+La señal conservada puede reunir movimientos generales del sistema y patrones propios de ciertos grupos. Un componente dominante que afecte ampliamente a las series puede ocultar diferencias entre subconjuntos. Para estudiar esas diferencias, MacMahon y Garlaschelli (2015, sección IV) proponen funciones de modularidad que comparan la dependencia dentro de una partición con un modelo nulo adecuado a matrices de correlación. Según la variante, se descuenta el ruido muestral y, cuando su interpretación está justificada, un modo global. La decisión de retirar este último requiere examinar las cargas de su vector propio y su estabilidad; ser el mayor valor propio no basta para atribuirle ese significado.
+
+El problema de análisis numérico consiste en construir la matriz de correlaciones, calcular su espectro y examinar la señal que el filtrado conserva para distinguir particiones. La interpretación actuarial de una partición obtenida exige revisar la calidad del indicador y la adecuación del modelo nulo.
+
+\newpage
+
+## 2. Hallazgos del proyecto
+
+### 2.1. Análisis exploratorio
+
+Los gráficos disponibles muestran cambios **trimestrales y anuales**; los cambios mensuales quedan pendientes. Se observan oscilaciones trimestrales recurrentes en Automóvil y en el seguro obligatorio de riesgos del trabajo (SRT), y movimientos abruptos en Caución y SOA.
+
+En las 1600 observaciones, la media de las razones individuales es 0,6408 y la mediana 0,3269. Para comparar ramos se suman siniestros y primas entre aseguradoras por trimestre, se calcula el cociente y se resumen sus valores temporales. En el seguro obligatorio de automóviles (SOA), la media es 6,1891 y la mediana 4,2280. **La media de SOA es inusualmente elevada y requiere investigación adicional**. Su separación de la mediana y los valores negativos del panel exigen revisar registros y denominadores antes de atribuirles una explicación económica.
+
+![Media y mediana temporal del indicador agregado por ramo, 2015–2022. Las razones se expresan en unidades, no en porcentajes.](../graficos/media_mediana.png){#fig-eda width=14cm fig-pos="H"}
+
+\newpage
+
+### 2.2. Matriz de correlación empírica
+
+Se organiza el panel en $L\in\mathbb{R}^{50\times32}$, con un nodo por fila y un trimestre por columna. Cada serie se centra y se divide por su desviación estándar muestral $s_i$. Con $T=32$,
+
+$$
+X_{it}=\frac{L_{it}-\bar L_i}{s_i},
+\qquad
+C=\frac{XX^{\mathsf T}}{T-1},
+\qquad
+C_{ij}=\frac{1}{T-1}\sum_{t=1}^{T}X_{it}X_{jt}.
+$$
+
+Así se obtiene una matriz simétrica de correlaciones de Pearson, con diagonal unitaria. La estandarización permite comparar movimientos entre series con distintos niveles y dispersiones. El ordenamiento jerárquico de la figura facilita la lectura de las asociaciones; no constituye una validación de comunidades.
+
+![Correlaciones empíricas entre los 50 nodos, ordenados por similitud. Rojo indica asociación positiva; azul, negativa; blanco, valores próximos a cero. Valores previos al filtrado espectral.](../graficos/matriz_correlacion_empirica.png){#fig-correlacion width=16.5cm fig-pos="H"}
+
+Entre los 1225 pares distintos, la correlación media es 0,0114 y la mediana 0,0009; coexisten asociaciones de ambos signos. Destacan la relación positiva entre INS–Accidentes y MAPFRE–Incendio y líneas aliadas ($0{,}8237$), y la negativa entre MAPFRE–Otros daños a los bienes y MAPFRE–Vida ($-0{,}8665$). La cercanía del promedio a cero no implica ausencia de dependencia: puede ocultar relaciones intensas de signo contrario. Estos resultados describen la muestra completa y aún requieren evaluar su sensibilidad a los valores extremos y a la ventana temporal.
+
+\newpage
+
+### 2.3. Marchenko–Pastur y elección de modularidad
+
+Con $q=N/T$, $N=50$ y $T=32$, los límites del soporte continuo de Marchenko–Pastur (MP) son
+
+$$
+q=1{,}5625,\qquad
+\lambda_{\pm}=(1\pm\sqrt q)^2,
+\qquad
+[\lambda_-,\lambda_+]=[0{,}0625;\,5{,}0625].
+$$
+
+Se obtiene $\lambda_1=6{,}9270$ y $\lambda_2=4{,}8250$: **un solo valor propio supera el límite superior**, y concentra el 13,85 % de la variación estandarizada total. Esta afirmación se refiere al borde superior, no a todo valor fuera del intervalo: también hay un valor positivo inferior a $\lambda_-$ ($0{,}0553$) y 19 valores prácticamente nulos. Estos últimos responden al límite de rango $T-1=31$ impuesto por el centrado. Para $q>1$, la ley MP incluye además una masa en cero.
+
+![Espectro empírico y límites de Marchenko–Pastur. Solo la primera barra supera la línea roja, correspondiente a $\lambda_+=5{,}0625$.](../resultados/RMT_modularidad/espectro_MP.png){#fig-mp width=12.8cm fig-pos="H"}
+
+El filtro asigna a $C^{(r)}$ los modos con $\lambda_a\leq\lambda_+$ y conserva $C^{(s)}=C-C^{(r)}$. La modularidad $Q_2$ de MacMahon y Garlaschelli (2015, ec. 34) utiliza esa señal:
+
+$$
+Q_2(g)=\frac{\sum_{i,j}C^{(s)}_{ij}\,\mathbf{1}\{g_i=g_j\}}
+{\sum_{i,j}C_{ij}},
+\qquad C^{(s)}=\lambda_1v_1v_1^{\mathsf T}.
+$$
+
+Como solo se retiene un modo, retirarlo también, como en $Q_3$, deja una matriz residual nula salvo redondeo; todas las particiones reciben el mismo valor. Por eso, **$Q_2$ es la única variante con filtrado espectral que permite distinguir particiones bajo el procedimiento actual**. $Q_1$ sigue siendo calculable como referencia, pero no descuenta el ruido muestral. La partición obtenida de $Q_2$ tiene grupos de 33 y 17 nodos, determinados por los signos del primer vector propio; no demuestra por sí sola dos comunidades económicas diferenciadas.
+
+El uso de MP es exploratorio: $N>T$ difiere del régimen $T>N$ adoptado por los autores y existen indicios de autocorrelación temporal. Queda pendiente calibrar el modelo nulo con esa dependencia y revisar la sensibilidad a los extremos antes de validar las agrupaciones.
+
+\vspace{3pt}
+\begingroup\small
+\noindent MacMahon, M. y Garlaschelli, D. (2015). *Community Detection for Correlation Matrices*. *Physical Review X*, **5**, 021006. [doi:10.1103/PhysRevX.5.021006](https://doi.org/10.1103/PhysRevX.5.021006).
+\endgroup

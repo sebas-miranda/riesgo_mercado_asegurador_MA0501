@@ -96,7 +96,7 @@ Estudiar cada serie de siniestralidad por separado permite conocer su nivel habi
 
 Trabajamos con datos públicos de primas y siniestros de SUGESE. Cada combinación de aseguradora y ramo es un *nodo*, identificado por $i=(a,r)$. Así podemos comparar ramos de una misma empresa y aseguradoras que operan en un mismo ramo, sin resumir toda la actividad de cada compañía en una sola serie.
 
-La pregunta es si hay grupos de nodos que tienden a moverse juntos y cuánto de esa relación puede deberse a tener pocas observaciones. Conocer estas asociaciones puede ayudar a estudiar la diversificación, la concentración de exposiciones y las necesidades de reaseguro, además de describir qué partes del mercado tienen comportamientos relacionados.
+La pregunta es si hay grupos de nodos que tienden a moverse juntos y cuánto de esa relación puede deberse a tener pocas observaciones. El estudio de estas asociaciones sirve para analizar la diversificación, la concentración de exposiciones y las necesidades de reaseguro, y para describir qué partes del mercado se mueven de forma parecida.
 
 ### 1.2. El indicador y las correlaciones
 
@@ -127,15 +127,15 @@ Para leer la matriz como una red, usamos los pares aseguradora–ramo como nodos
 
 Al variar el umbral podemos ver cómo se reduce la red y cuáles conexiones permanecen. Los PMFG ofrecen otra forma de resumir la matriz, con un número fijo de enlaces para el mismo conjunto de nodos.
 
-Estas representaciones ayudan a explorar conexiones. Para buscar grupos necesitamos además un criterio que compare las relaciones internas con las externas. MacMahon y Garlaschelli (2015) distinguen este problema del filtrado de enlaces y proponen una modularidad adaptada a matrices de correlación.
+Los grafos muestran las conexiones entre los nodos. Para buscar grupos comparamos las relaciones internas con las externas. MacMahon y Garlaschelli (2015) distinguen este problema del filtrado de enlaces y proponen una modularidad adaptada a matrices de correlación.
 
 ### 1.4. ¿Dónde entra la teoría de matrices aleatorias?
 
-Con una muestra finita aparecen correlaciones distintas de cero incluso entre series independientes. El problema se hace más evidente cuando hay muchas series y pocos períodos. La teoría de matrices aleatorias (RMT) permite comparar los valores propios de la matriz empírica con una referencia de lo que esperaríamos por ruido muestral.
+Con una muestra finita aparecen correlaciones distintas de cero incluso entre series independientes. El problema se hace más evidente cuando hay muchas series y pocos períodos. Con la teoría de matrices aleatorias (RMT) comparamos los valores propios de la matriz empírica con una referencia de ruido muestral.
 
-Los valores propios indican cuánta variación corresponde a cada dirección de movimiento conjunto, descrita por su vector propio. Los modos que superan la referencia se conservan como candidatos a señal.
+Los valores propios indican cuánta variación corresponde a cada dirección de movimiento conjunto, descrita por su vector propio. El filtro conserva como señal los modos que superan el límite superior de esa referencia.
 
-La señal puede incluir tanto movimientos generales como patrones de grupos. Las variantes de modularidad de MacMahon y Garlaschelli descuentan el ruido y, en una de ellas, también un modo global. Las cargas del vector propio permiten ver qué series participan en ese movimiento.
+Las variantes de modularidad de MacMahon y Garlaschelli usan distintos modelos de referencia. $Q_2$ descuenta el ruido y $Q_3$ también retira el modo principal. Las cargas del vector propio muestran qué series participan en ese movimiento.
 
 La parte numérica del proyecto consiste en construir la matriz, calcular sus valores y vectores propios, reconstruir las componentes filtradas y estudiar las particiones que se obtienen. En este avance presentamos los primeros resultados sobre el panel actual.
 
@@ -145,13 +145,13 @@ La parte numérica del proyecto consiste en construir la matriz, calcular sus va
 
 ### 2.1. Análisis exploratorio
 
-El panel contiene 50 series y 32 trimestres, de 2015 a 2022, para un total de 1600 observaciones. Los gráficos de cambios trimestrales y anuales muestran oscilaciones recurrentes en Automóvil y en el seguro obligatorio de riesgos del trabajo (SRT), además de movimientos abruptos en Caución y en el seguro obligatorio de automóviles (SOA). Los cambios mensuales quedan pendientes.
+El panel contiene 50 series y 32 trimestres, de 2015 a 2022, para un total de 1600 observaciones. Los gráficos de cambios trimestrales y anuales muestran oscilaciones recurrentes en Automóvil y en el seguro obligatorio de riesgos del trabajo (SRT), además de movimientos abruptos en Caución y en el seguro obligatorio de automóviles (SOA).
 
 La media de las razones individuales es 0,6408 y la mediana es 0,3269. Para comparar ramos, sumamos los siniestros y las primas entre aseguradoras en cada trimestre, calculamos su cociente y luego resumimos los valores a lo largo del tiempo.
 
 SOA destaca con una media de 6,1891 y una mediana de 4,2280. La media supera bastante a la mediana, por lo que las observaciones altas tienen un peso importante en el promedio. También aparecen valores negativos en el panel.
 
-![Media y mediana temporal de la razón agregada por ramo, 2015–2022. Los valores están en unidades, no en porcentajes.](../graficos/media_mediana.png){#fig-eda width=14cm fig-pos="H"}
+![Media y mediana temporal de la razón agregada por ramo, 2015–2022. Las razones se expresan en unidades.](../graficos/media_mediana.png){#fig-eda width=14cm fig-pos="H"}
 
 \newpage
 
@@ -169,7 +169,7 @@ $$
 
 La matriz resultante es simétrica y tiene unos en la diagonal. En la figura ordenamos los nodos por similitud para facilitar la lectura.
 
-![Correlaciones empíricas entre los 50 nodos. Rojo indica asociación positiva; azul, negativa; blanco, valores cercanos a cero. La matriz aún no tiene filtrado RMT.](../graficos/matriz_correlacion_empirica.png){#fig-correlacion width=16.5cm fig-pos="H"}
+![Correlaciones empíricas entre los 50 nodos. Rojo indica asociación positiva; azul, negativa; blanco, valores cercanos a cero.](../graficos/matriz_correlacion_empirica.png){#fig-correlacion width=16.5cm fig-pos="H"}
 
 Entre los 1225 pares distintos, la correlación media es 0,0114 y la mediana es 0,0009. Aun así, hay relaciones fuertes de ambos signos. Por ejemplo, INS–Accidentes y MAPFRE–Incendio y líneas aliadas tienen una correlación de $0{,}8237$, mientras que MAPFRE–Otros daños a los bienes y MAPFRE–Vida tienen una de $-0{,}8665$. El promedio cercano a cero resume relaciones positivas y negativas que se compensan entre sí.
 
@@ -189,7 +189,7 @@ Al pasar de 0,30 a 0,50, la red pierde 129 enlaces. En los tres casos mantenemos
 
 ![Red signed con $h=0{,}40$. El color de cada nodo identifica la aseguradora. Los enlaces azules continuos son positivos y los naranjas discontinuos son negativos; el grosor indica la magnitud de la correlación.](../graficos/red_empirica_h_0.40.png){#fig-umbral width=16cm fig-pos="H"}
 
-La figura intermedia conserva 68 conexiones, de las cuales 26 son negativas. Conservar ambos signos permite ver esas relaciones en una misma red. Las tres redes se generan con `R/visualizar_redes.R` a partir de la matriz empírica, antes de aplicar RMT.
+La figura intermedia conserva 68 conexiones, de las cuales 26 son negativas. Conservar ambos signos permite ver esas relaciones en una misma red. Las tres redes se generan con `R/visualizar_redes.R` a partir de la matriz empírica.
 
 \newpage
 
@@ -233,9 +233,9 @@ Q_2(g)=\frac{\sum_{i,j}C^{(s)}_{ij}\,\mathbf{1}\{g_i=g_j\}}
 \qquad C^{(s)}=\lambda_1v_1v_1^{\mathsf T}.
 $$
 
-Como solo conservamos un modo, retirarlo también, como hace $Q_3$, deja una matriz nula salvo redondeo y todas las particiones reciben el mismo valor. Por eso usamos $Q_2$ para distinguir particiones con el filtro actual. $Q_1$ se mantiene como referencia, aunque no descuenta el ruido. Con $Q_2$ obtenemos grupos de 33 y 17 nodos, separados por los signos del primer vector propio.
+Como solo conservamos un modo, retirarlo también, como hace $Q_3$, deja una matriz nula salvo redondeo y todas las particiones reciben el mismo valor. Por eso usamos $Q_2$ para distinguir las particiones. $Q_1$ se mantiene como referencia, aunque no descuenta el ruido. Con $Q_2$ obtenemos grupos de 33 y 17 nodos, separados por los signos del primer vector propio.
 
-El siguiente paso es estudiar la composición de los grupos y comparar los resultados al ajustar el tratamiento de los valores extremos y la dependencia temporal.
+Seguiremos con el análisis de la composición de los grupos y la comparación de sus conexiones en las redes.
 
 \newpage
 

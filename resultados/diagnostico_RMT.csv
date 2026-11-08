@@ -1,0 +1,3 @@
+"metodo","N","T","q","lambda_menos","lambda_mas","masa_cero_MP","lambda_maxima","peso_lambda_maximo","autovalores_sobre_MP","autovalores_dentro_banda","autovalores_bajo_banda","autovalores_casi_cero"
+"Pearson",42,39,1.10526315789474,0.0026332257433496,4.20789309004612,0.0952380952380953,5.90022141939401,0.140481462366524,1,37,0,4
+"Spearman",42,39,1.10526315789474,0.0026332257433496,4.20789309004612,0.0952380952380953,6.20033913404485,0.147627122239163,1,37,0,4

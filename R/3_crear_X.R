@@ -1,7 +1,7 @@
 # Estandarizamos L los loss ratio con la desviacion estandar muestral insesgada 
 
-crear_X <- function(L) {
-  #Dimension extract
+crear_X <- function(L, metodo = "pearson") {
+  #Dimension extraction
   N <- nrow(L)
   t <- ncol(L)
    # Inicializar matriz dim N*t 
@@ -14,10 +14,18 @@ crear_X <- function(L) {
   
   # Estandariza cada nodo 
   for (i in 1:N) {
-    # media temporal en la fila i-esima
-    media_fil_i <- mean(L[i,])
+    # Extraemos la serie del LR
+    serie <- L[i, ]
+
+    # Para la correlacion de Spearman, utilizamos los rangos
+    if(metodo == "spearman"){
+      serie <- rank(serie, ties.method = "average")
+    }
+
+    # media temporal en la fila i-esima 
+    media_fil_i <- mean(serie)
     # Desviacion estandar muestral 
-    sd_fila_i <- sd(L[i,])
+    sd_fila_i <- sd(serie)
     
     # SECCION A REVISAR PARA CONTROL DE OUTLIERS EN LA  ESTANDARIZACION 
     if(sd_fila_i==0){
@@ -25,7 +33,7 @@ crear_X <- function(L) {
     }
     
     # Estandarizar
-    X[i,] <- (L[i,]-media_fil_i)/sd_fila_i
+    X[i,] <- (serie-media_fil_i)/sd_fila_i
     
   }
   #Devolver X estandarizado

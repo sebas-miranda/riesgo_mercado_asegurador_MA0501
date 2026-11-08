@@ -1,8 +1,10 @@
 # Creacion de la matriz de loss ratios 
 
+library(tidyverse)
+
 crear_L <- function(ruta_csv) {
   # Procesar los datos del csv
-  datos <- read.csv(ruta_csv, stringsAsFactors = FALSE, fileEncoding = 'UTF-8')
+  datos <- read_csv(ruta_csv, show_col_types = FALSE)
   # Identificacion del nodo concatenar Aseguradora-Ramo 
   datos$nodo <- paste(datos$aseguradora, datos$ramo, sep = '-' )
   datos$periodo <- paste0(datos$anio, 'T',datos$trimestre)

@@ -38,8 +38,8 @@ V <- espectro$vectors
 # Conservamos aca tambien los nombres de los nodos en cada fila de un eigenvector
 rownames(V) <- nombres
 
-# 4. Calculamos las bandas Marchenko-Pastur
-q <- N/(T_serie-1)
+# Cociente de dimensiones para los bordes clásicos de Marchenko-Pastur.
+q <- N / T_serie
 lambda_menos <- (1 - sqrt(q))^2
 lambda_mas   <- (1 + sqrt(q))^2
 
@@ -146,10 +146,10 @@ graficar_MP <- function(resultado) {
         "Inferior" = "#0066CC"
       ),
       breaks = c("Superior", "Inferior"),
-      labels = c(
-        paste0("λ+ = ", sprintf("%.6f", resultado$lambda_mas)),
-        paste0("λ- = ", sprintf("%.6f", resultado$lambda_menos))
-      )
+      labels = as.expression(list(
+        bquote(lambda["+"] == .(sprintf("%.6f", resultado$lambda_mas))),
+        bquote(lambda["-"] == .(sprintf("%.6f", resultado$lambda_menos)))
+      ))
     ) +
 
     # Valores propios superiores a MP en rojo
@@ -165,12 +165,8 @@ graficar_MP <- function(resultado) {
     # which.max() devuelve la posicion del valor mas grande.
     geom_text(
       data = datos[which.max(datos$eigenvalue), , drop = FALSE],
-      aes(
-        label = paste0(
-          "λmax = ",
-          round(eigenvalue, 3)
-        )
-      ),
+      aes(label = sprintf("lambda[max] == %.3f", eigenvalue)),
+      parse = TRUE,
       vjust = -0.6,
       size = 4.5,
       color = "black"
@@ -238,28 +234,11 @@ print(grafico_pearson)
 print(grafico_spearman)
 
 
-# Guardamos los resultados de Pearson, RDS es un objeto, en este caso contendra la matriz C,
-# los eigenvalues, los eigenvectors, y el eigenvalue maximo.
-saveRDS(
-  list(
-    C = rmt_pearson$C,
-    lambda = rmt_pearson$lambda,
-    V = rmt_pearson$V,
-    lambda_mas = rmt_pearson$lambda_mas
-  ),
-  "resultados/RMT_pearson.rds"
-)
-
-# Analogamente, para Spearman
-saveRDS(
-  list(
-    C = rmt_spearman$C,
-    lambda = rmt_spearman$lambda,
-    V = rmt_spearman$V,
-    lambda_mas = rmt_spearman$lambda_mas
-  ),
-  "resultados/RMT_spearman.rds"
-)
+# cada columna corresponde al valor propio en la misma posición de la tabla
+write.csv(rmt_pearson$V, "resultados/eigenvectors_pearson.csv",
+          fileEncoding = "UTF-8")
+write.csv(rmt_spearman$V, "resultados/eigenvectors_spearman.csv",
+          fileEncoding = "UTF-8")
 
 # Guardamos la tabla de eigenvalues de pearson
 write.csv(

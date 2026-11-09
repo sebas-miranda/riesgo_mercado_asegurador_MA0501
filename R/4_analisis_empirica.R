@@ -1,5 +1,4 @@
-# Este script tiene el objetivo de realizar un análisis de lasmatrices de correlación empíricas.
-# En aras de comparar sensibilidades, comparamos tanto Spearman como 
+# Matrices de correlación empírica de Pearson y Spearman
 
 library(ggplot2)
 
@@ -25,6 +24,10 @@ T_serie <- ncol(L)
 C_pearson <- X_pearson %*% t(X_pearson) / (T_serie - 1)
 C_spearman <- X_spearman %*% t(X_spearman) / (T_serie - 1)
 
+write.csv(C_pearson, "resultados/correlacion_pearson_empirica.csv",
+          fileEncoding = "UTF-8")
+write.csv(C_spearman, "resultados/correlacion_spearman_empirica.csv",
+          fileEncoding = "UTF-8")
 
 # Construimos distancias, de modo que podamos agrupar las correlaciones mayores, es decir
 # premiar a los grupos de productos que mas similar se comportan, utilizamos a spearman:
@@ -109,7 +112,7 @@ grafico <- ggplot(
   coord_fixed() +
   
   labs(
-    title = paste("Matriz de correlación empírica", metodo),
+    title = paste("Matriz de correlación empírica de", metodo),
     subtitle = paste0("Correlacion entre ramos de aseguradoras. ", "N = ", nrow(C)," nodos | T = ", T_serie ),
     x = NULL,
     y = NULL,
@@ -185,5 +188,3 @@ ggsave(
   dpi = 300,
   bg = "white"
 )
-
-  

@@ -1,4 +1,6 @@
 library(ggplot2)
+library(patchwork)
+
 
 source("R/2_crear_L.R")
 source("R/3_crear_X.R")
@@ -106,6 +108,10 @@ return(list(
 rmt_pearson <- analizar_RMT(X_pearson, "Pearson")
 rmt_spearman <- analizar_RMT(X_spearman, "Spearman")
 
+limite_y <- max(
+  rmt_pearson$lambda,
+  rmt_spearman$lambda
+) * 1.15
 
 
 graficar_MP <- function(resultado) {
@@ -168,6 +174,8 @@ graficar_MP <- function(resultado) {
       aes(label = sprintf("lambda[max] == %.3f", eigenvalue)),
       parse = TRUE,
       vjust = -0.6,
+      hjust = 0,
+      nudge_x = 0.5,
       size = 4.5,
       color = "black"
     ) +
@@ -181,10 +189,7 @@ graficar_MP <- function(resultado) {
       ),
       x = "Índice",
       y = "Valor propio",
-      caption = paste0(
-        length(resultado$indices_cero),
-        " valores propios prácticamente nulos"
-      )
+
     ) +
 
     scale_x_continuous(
@@ -192,9 +197,10 @@ graficar_MP <- function(resultado) {
     ) +
 
     # Espacio para la etiqueta sobre el mayor valor propio
-    expand_limits(
-      y = max(resultado$lambda) * 1.15
-    ) +
+  coord_cartesian(
+    ylim = c(0, limite_y),
+    expand = FALSE
+  ) + 
 
     theme_minimal(base_size = 13) +
 
@@ -229,9 +235,8 @@ graficar_MP <- function(resultado) {
 # Generamos ambos graficos
 grafico_pearson <- graficar_MP(rmt_pearson)
 grafico_spearman <- graficar_MP(rmt_spearman)
-
-print(grafico_pearson)
-print(grafico_spearman)
+comparacion <- grafico_pearson|grafico_spearman
+comparacion
 
 
 # cada columna corresponde al valor propio en la misma posición de la tabla
@@ -263,20 +268,10 @@ write.csv(
   "resultados/diagnostico_RMT.csv",
   row.names = FALSE
 )
-# Finalmente, los graficos de los eigenvalues para Pearson y Spearman
+# Finalmente, guardamos los graficos
 
 ggsave(
-  file.path("graficos", "rmt_pearson.png"),
-  plot = grafico_pearson,
-  width = 10,
-  height = 6,
-  dpi = 300
-)
+  "graficos/comparacion_pearson_spearman_eigen.pdf",
+       plot = comparacion,
+       width = 36, height = 15, bg = "white")
 
-ggsave(
-  file.path("graficos", "rmt_spearman.png"),
-  plot = grafico_spearman,
-  width = 10,
-  height = 6,
-  dpi = 300
-)

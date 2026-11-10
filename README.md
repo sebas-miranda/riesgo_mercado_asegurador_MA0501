@@ -50,7 +50,7 @@ Todas estas celdas comparten que al menos uno de los LR superó 2 en el trimestr
 
 ## El trabajo con RMT
 
-El espectro de cada matriz se compara con la banda de Marchenko–Pastur. Con `q = N/T = 42/39`, el borde superior de referencia es 4,1524. Solo un valor propio lo supera en cada matriz. En Pearson es 5,9002 y en Spearman, 6,2003. [MacMahon y Garlaschelli (2015), ecuación 12](https://arxiv.org/pdf/1311.1924#page=5)
+El espectro de cada matriz se compara con la banda de Marchenko–Pastur. Con `q = N/T = 42/39`, el borde superior de referencia es 4,1524. Solo un valor propio lo supera en cada matriz. En Pearson es 5,9002 y en Spearman, 6,2003.
 
 [![Valores propios y bandas de Marchenko–Pastur para Pearson y Spearman](graficos/comparacion_pearson_spearman_eigen.png)](graficos/comparacion_pearson_spearman_eigen.pdf)
 
@@ -93,4 +93,4 @@ El paso 1 reconstruye el panel desde el Excel. Si se usa el panel que ya está e
 | [Datos](datos/) | Excel original y panel trimestral procesado. |
 | [Scripts en R](R/) | Selección del panel, correlaciones, espectros y limpieza. |
 | [Gráficos](graficos/) | Mapas de correlación y comparaciones de los espectros. |
-| [Avance 1](informes/Avance%201.pdf) · [Fuente de Quarto](informes/Avance%201.qmd) | Trabajo sobre la [base anterior](https://github.com/sebas-miranda/riesgo_mercado_asegurador_MA0501/blob/db3198fc31becd065e0f0756972f759f7b1ebb36/datos/datos_procesados/panel_trimestral.csv), en el período 2015–2022.<br>$\mathrm{LR}_{\text{brutas}} = \frac{\text{Siniestros pagados}}{\text{Primas brutas}}$.<br>Algunas primas trimestrales muy bajas o negativas dieron LR de 49,44 y −64,12. Al usar montos brutos, las primas reportadas y los siniestros pagados podían quedar desfasados en el tiempo. Esos valores podían distorsionar algunas correlaciones, por lo que el análisis actual usa la cuenta técnica y exige prima positiva. |
+| [Avance 1](informes/Avance%201.pdf) · [Fuente de Quarto](informes/Avance%201.qmd) | Trabajo sobre la [base anterior](datos/datos_originales/Reporte_Primas_Y_Siniestros_Por_Ramo_Y_Aseguradora.xlsx), en el período 2015–2022.<br>$\mathrm{LR}_{\text{brutas}} = \frac{\text{Siniestros pagados}}{\text{Primas brutas}}$.<br>Algunas primas trimestrales muy bajas o negativas dieron LR de 49,44 y −64,12. Al usar montos brutos, las primas reportadas y los siniestros pagados podían quedar desfasados en el tiempo. Esos valores podían distorsionar algunas correlaciones, por lo que el análisis actual usa la cuenta técnica y exige prima positiva. |

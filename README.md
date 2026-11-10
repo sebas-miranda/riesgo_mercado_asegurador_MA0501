@@ -1,8 +1,3 @@
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/portada.png">
-  <img src="docs/assets/portada.gif" alt="Red de correlaciones del panel SUGESE: las conexiones cambian al aumentar y reducir el umbral h, mientras los nodos mantienen sus posiciones." width="100%">
-</picture>
-
 # Dependencia en el mercado asegurador costarricense
 
 <p>
@@ -12,126 +7,43 @@
   <img src="docs/assets/estado.svg" alt="Proyecto en desarrollo" height="25">
 </p>
 
-Proyecto de Análisis Numérico I de la Universidad de Costa Rica, II ciclo de 2026.
+Proyecto de Análisis Numérico I de la Universidad de Costa Rica, II ciclo de 2026. Estudiamos cómo se relacionan los *loss ratios* de distintos ramos y aseguradoras del mercado costarricense.
 
-El proyecto estudia cómo se relacionan los ramos de distintas aseguradoras a partir de los datos públicos de primas y siniestros de SUGESE. El análisis parte de una matriz de correlación, representada como una red de conexiones entre series y estudiada a través de sus valores propios con herramientas de teoría de matrices aleatorias (RMT).
+## Datos
 
-El panel actual contiene **50 series aseguradora–ramo y 32 trimestres, de 2015 a 2022**. El repositorio reúne el procesamiento de los datos, los scripts de R y las figuras del análisis.
+El panel tiene 42 series de 12 aseguradoras y cubre 39 trimestres, de 2017-T1 a 2026-T3. Cada serie corresponde a una combinación de aseguradora y ramo.
 
-## Los datos y la matriz
+Los montos vienen del reporte «Resultado Técnico-Financiero» de SUGESE. Para calcular el *loss ratio* de cada trimestre, dividimos la siniestralidad neta de reaseguro entre la prima imputada neta de reaseguro. El panel reúne las series con prima positiva y un cociente calculable en todos los trimestres del período. [Reporte de SUGESE](https://www.sugese.fi.cr/cr/es/estadisticas.html) · [Excel del proyecto](datos/datos_originales/Reporte_Cuentas_Tecnicas.xlsx) · [Panel trimestral](datos/datos_procesados/panel_trimestral.csv)
 
-La fuente es el reporte **«Primas y siniestros — Por ramo y aseguradora»** de [SUGESE](https://www.sugese.fi.cr/cr/es/estadisticas.html). El Excel está en [`datos/datos_originales/`](datos/datos_originales/).
+## Correlaciones y valores propios
 
-Los montos vienen acumulados dentro de cada año. Los flujos trimestrales se obtienen con el cierre de marzo y las diferencias entre cierres consecutivos. Después se calcula `loss_ratio = siniestros_brutos / primas_brutas` y se conservan las series completas en el período común del panel.
+Calculamos dos matrices de correlación. Pearson usa los valores del *loss ratio* y Spearman usa sus rangos dentro de cada serie. Las filas se centran y estandarizan antes de calcular la correlación entre pares de series. [Mapas de Pearson y Spearman](graficos/comparacion_pearson_spearman.pdf)
 
-Cada fila de `L` es una combinación de aseguradora y ramo; cada columna es un trimestre. Cada fila se centra y estandariza para obtener `X`. La matriz empírica se calcula con:
+Comparamos los valores propios de ambas matrices con la banda de Marchenko–Pastur. Con `q = N/T = 42/39`, el borde superior de referencia es 4,1524. Solo un valor propio supera el borde en cada matriz. En Pearson es 5,9002 y en Spearman, 6,2003. [Comparación de los espectros](graficos/comparacion_pearson_spearman_eigen.pdf) · [MacMahon y Garlaschelli (2015), ecuación 12](https://arxiv.org/pdf/1311.1924#page=5)
 
-```r
-C <- (X %*% t(X)) / (T_serie - 1)
-```
+## Limpieza de Spearman
 
-El divisor es `T_serie - 1` porque la estandarización usa la desviación estándar muestral.
+Conservamos el primer valor propio de Spearman y reemplazamos los otros 41 por su promedio, 0,8732. Reconstruimos la matriz con los mismos vectores propios y la reescalamos para que la diagonal vuelva a valer uno. El mapa comparativo usa el mismo orden de series en ambos paneles para ver cómo cambian las correlaciones. [Matriz empírica y matriz limpia](graficos/comparacion_spearman_rmt.pdf)
 
-<details>
-<summary>Ver la matriz de correlación</summary>
+## Ejecución en R
 
-![Matriz de correlación empírica, ordenada por similitud entre series](graficos/matriz_correlacion_empirica.png)
-
-La diagonal vale uno. Los colores muestran el signo y la magnitud de la correlación.
-
-</details>
-
-## Las redes
-
-Cada nodo es una serie aseguradora–ramo. El color identifica a la aseguradora; los enlaces azules son positivos y los naranjas discontinuos son negativos. El grosor depende de `|ρᵢⱼ|`.
-
-### Elegir un umbral
-
-Se conserva un enlace cuando `|ρᵢⱼ| ≥ h`. Al subir `h` quedan menos conexiones. Los nodos aislados permanecen en la figura para poder comparar el mismo conjunto de series.
-
-| `h` | Enlaces | Positivos | Negativos |
-| --- | ---: | ---: | ---: |
-| 0.30 | 161 | 94 | 67 |
-| 0.40 | 68 | 42 | 26 |
-| 0.50 | 32 | 18 | 14 |
-
-![Red signed de la matriz empírica con h igual a 0.40](graficos/red_empirica_h_0.40.png)
-
-Las tres figuras del avance usan las mismas posiciones de los nodos.
-
-### Conservar la planaridad: PMFG
-
-El *Planar Maximally Filtered Graph* recorre los pares en orden y agrega cada enlace si la red sigue siendo planar. El script aplica dos criterios: `ρᵢⱼ` descendente y `|ρᵢⱼ|` descendente. En ambos se conserva la correlación original, incluido su signo.
-
-<table width="100%">
-  <tr>
-    <th>Orden por ρᵢⱼ</th>
-    <th>Orden por |ρᵢⱼ|</th>
-  </tr>
-  <tr>
-    <td width="50%"><a href="graficos/pmfg_clasico.png"><img src="graficos/pmfg_clasico.png" alt="PMFG ordenado por rho: 139 enlaces positivos y 5 negativos" width="100%"></a></td>
-    <td width="50%"><a href="graficos/pmfg_magnitud.png"><img src="graficos/pmfg_magnitud.png" alt="PMFG ordenado por valor absoluto de rho: 87 enlaces positivos y 57 negativos" width="100%"></a></td>
-  </tr>
-  <tr>
-    <td>139 positivos · 5 negativos</td>
-    <td>87 positivos · 57 negativos</td>
-  </tr>
-</table>
-
-Los dos PMFG tienen `3N − 6 = 144` enlaces. El acomodo planar evita cruces; la forma triangular del dibujo viene del algoritmo de posiciones. Cada imagen se puede abrir para verla completa.
-
-Ordenar por magnitud permite conservar relaciones negativas fuertes. Por ejemplo, la correlación entre MAPFRE–Bienes y MAPFRE–Vida es aproximadamente **−0.867** y aparece en el PMFG por `|ρᵢⱼ|`.
-
-## El trabajo con RMT
-
-[`R/RMT.R`](R/RMT.R) calcula el espectro de la matriz empírica, lo compara con los bordes de Marchenko–Pastur y separa componentes para explorar las modularidades de correlaciones `Q1` y `Q2`. La búsqueda de comunidades es una heurística propia con movimientos de nodos, fusiones y reinicios.
-
-En el panel actual hay más series que trimestres (`N/T = 1.5625`). El análisis con la banda clásica de Marchenko–Pastur se mantiene **exploratorio**. Las figuras de umbral y PMFG de este README usan la matriz empírica, sin filtrado RMT. Las conexiones describen correlaciones entre las series; no permiten afirmar que una aseguradora contagia a otra.
-
-Los resultados de esa parte se guardan en [`resultados/RMT_modularidad/`](resultados/RMT_modularidad/).
-
-## Ejecución
-
-Abrir [`riesgo_mercado_asegurador_MA0501.Rproj`](riesgo_mercado_asegurador_MA0501.Rproj) en RStudio o la carpeta del repositorio en Positron. Ejecutar los scripts desde la raíz del proyecto.
-
-Instalar una vez los paquetes de CRAN:
+Abrí el [proyecto de RStudio](riesgo_mercado_asegurador_MA0501.Rproj) o la carpeta del repositorio en Positron. Corré los comandos desde la raíz del proyecto. Los paquetes se instalan una sola vez.
 
 ```r
 install.packages(c("here", "ggplot2", "patchwork", "readxl", "tidyverse"))
 ```
 
-El panel procesado está en el repositorio.
-
-<details>
-<summary>Volver a procesar el Excel o ejecutar la parte espectral</summary>
+El panel procesado ya está en el repo. Para reconstruirlo desde el Excel, corré también el primer comando.
 
 ```r
-# reconstruir el panel a partir del excel
-source("R/seleccionar_panel.R", encoding = "UTF-8")
-
-# matriz de correlación y mapa de calor
-source("R/analisis_emprica.R", encoding = "UTF-8")
-
-# espectro, componentes y modularidades Q1 / Q2
-source("R/RMT.R", encoding = "UTF-8")
+source("R/1_seleccionar_panel.R", encoding = "UTF-8")
+source("R/4_analisis_empirica.R", encoding = "UTF-8")
+source("R/5_RMT.R", encoding = "UTF-8")
+source("R/6_limpiar_correlacion.R", encoding = "UTF-8")
 ```
 
-</details>
+El paso 4 guarda las matrices empíricas en `resultados/`. El paso 5 guarda los valores propios, sus vectores y el diagnóstico de Marchenko–Pastur. El paso 6 lee esas salidas y guarda `resultados/correlacion_spearman_limpia.csv` y el PDF con los mapas comparativos.
 
-## Archivos del proyecto
+## Avance 1
 
-| Archivo o carpeta | Contenido |
-| --- | --- |
-| [`R/seleccionar_panel.R`](R/seleccionar_panel.R) | Lectura del Excel, flujos trimestrales y selección de series completas. |
-| [`R/crear_L.R`](R/crear_L.R) y [`R/crear_X.R`](R/crear_X.R) | Matriz de loss ratios y estandarización por serie. |
-| [`R/analisis_emprica.R`](R/analisis_emprica.R) | Correlación empírica y mapa de calor. |
-| [`R/RMT.R`](R/RMT.R) | Análisis espectral y modularidades de correlaciones. |
-| [`datos/`](datos/) | Excel original y panel procesado. |
-| [`graficos/`](graficos/) | Imágenes generadas por los scripts. |
-| [`resultados/RMT_modularidad/`](resultados/RMT_modularidad/) | Matrices, valores propios, comunidades y diagnóstico espectral. |
-
-## Referencias de trabajo
-
-- **SUGESE.** [Estadísticas del mercado de seguros](https://www.sugese.fi.cr/cr/es/estadisticas.html), reporte de primas y siniestros por ramo y aseguradora.
-- **Tumminello, Aste, Di Matteo y Mantegna (2005).** [A tool for filtering information in complex systems](https://arxiv.org/abs/cond-mat/0501335). Construcción del PMFG.
-- **MacMahon y Garlaschelli (2015).** [Community detection for correlation matrices](https://doi.org/10.1103/PhysRevX.5.021006). Modularidad para matrices de correlación.
+El informe del primer avance reúne el análisis con la base de 2015 a 2022. [Avance 1 en PDF](informes/Avance%201.pdf) · [Fuente de Quarto](informes/Avance%201.qmd)

@@ -57,11 +57,7 @@ Se conserva un enlace cuando `|ρᵢⱼ| ≥ h`. Al subir `h` quedan menos conex
 
 ![Red signed de la matriz empírica con h igual a 0.40](graficos/red_empirica_h_0.40.png)
 
-Las tres figuras usan las mismas posiciones de los nodos. Para probar otros valores, modificar esta línea en [`R/visualizar_redes.R`](R/visualizar_redes.R):
-
-```r
-h <- c(.30, .40, .50)
-```
+Las tres figuras del avance usan las mismas posiciones de los nodos.
 
 ### Conservar la planaridad: PMFG
 
@@ -96,31 +92,15 @@ Los resultados de esa parte se guardan en [`resultados/RMT_modularidad/`](result
 
 ## Ejecución
 
-Abrir [`riesgo_mercado_asegurador_MA0501.Rproj`](riesgo_mercado_asegurador_MA0501.Rproj) en RStudio o la carpeta del repositorio en Positron. Ejecutar los scripts desde la raíz del proyecto; las visualizaciones usan `here()` para encontrar los archivos.
+Abrir [`riesgo_mercado_asegurador_MA0501.Rproj`](riesgo_mercado_asegurador_MA0501.Rproj) en RStudio o la carpeta del repositorio en Positron. Ejecutar los scripts desde la raíz del proyecto.
 
 Instalar una vez los paquetes de CRAN:
 
 ```r
-install.packages(c(
-  "here", "igraph", "ggplot2", "ggrepel", "graphlayouts",
-  "readxl", "dplyr", "tidyr", "BiocManager"
-))
+install.packages(c("here", "ggplot2", "patchwork", "readxl", "tidyverse"))
 ```
 
-Para el PMFG, instalar también RBGL y `graph`, disponibles en Bioconductor:
-
-```r
-BiocManager::install(c("RBGL", "graph"), update = FALSE, ask = FALSE)
-```
-
-El panel procesado ya está en el repositorio. Para generar las redes y verlas en el panel de gráficos de R:
-
-```r
-source("R/visualizar_redes.R", encoding = "UTF-8")
-source("R/visualizar_PMFG.R", encoding = "UTF-8")
-```
-
-Los scripts también guardan los PNG a 300 dpi en [`graficos/`](graficos/).
+El panel procesado está en el repositorio.
 
 <details>
 <summary>Volver a procesar el Excel o ejecutar la parte espectral</summary>
@@ -136,8 +116,6 @@ source("R/analisis_emprica.R", encoding = "UTF-8")
 source("R/RMT.R", encoding = "UTF-8")
 ```
 
-`R/graficos_tsai.R` contiene las figuras descriptivas por ramo. Antes de ejecutarlo, ajustar `carpeta_proyecto`, que tiene una ruta local al inicio del archivo.
-
 </details>
 
 ## Archivos del proyecto
@@ -147,10 +125,7 @@ source("R/RMT.R", encoding = "UTF-8")
 | [`R/seleccionar_panel.R`](R/seleccionar_panel.R) | Lectura del Excel, flujos trimestrales y selección de series completas. |
 | [`R/crear_L.R`](R/crear_L.R) y [`R/crear_X.R`](R/crear_X.R) | Matriz de loss ratios y estandarización por serie. |
 | [`R/analisis_emprica.R`](R/analisis_emprica.R) | Correlación empírica y mapa de calor. |
-| [`R/visualizar_redes.R`](R/visualizar_redes.R) | Redes signed para distintos umbrales. |
-| [`R/visualizar_PMFG.R`](R/visualizar_PMFG.R) | PMFG con los dos criterios y dibujos planares. |
 | [`R/RMT.R`](R/RMT.R) | Análisis espectral y modularidades de correlaciones. |
-| [`R/graficos_tsai.R`](R/graficos_tsai.R) | Figuras descriptivas de los loss ratios y sus cambios. |
 | [`datos/`](datos/) | Excel original y panel procesado. |
 | [`graficos/`](graficos/) | Imágenes generadas por los scripts. |
 | [`resultados/RMT_modularidad/`](resultados/RMT_modularidad/) | Matrices, valores propios, comunidades y diagnóstico espectral. |

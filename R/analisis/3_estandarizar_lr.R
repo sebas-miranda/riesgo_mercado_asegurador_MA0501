@@ -1,4 +1,6 @@
-# Estandarizamos L los loss ratio con la desviacion estandar muestral insesgada 
+# Centra y estandariza cada serie. Para Spearman usa los rangos de los LR.
+# Recibe la matriz L y el método (Pearson o Spearman).
+# Devuelve la matriz estandarizada X.
 
 crear_X <- function(L, metodo = "pearson") {
   #Dimension extraction

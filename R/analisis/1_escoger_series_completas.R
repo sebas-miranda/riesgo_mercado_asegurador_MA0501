@@ -1,9 +1,15 @@
+# Escoge la ventana con más observaciones de series completas y con LR variable.
+# Lee datos/datos_originales/Reporte_Cuentas_Tecnicas.xlsx.
+# Guarda datos/datos_procesados/panel_trimestral.csv con los LR trimestrales.
+
 library(readxl)
 library(tidyverse)
+library(here)
 
 # LEER DATOS
-datos <- read_excel("datos/datos_originales/Reporte_Cuentas_Tecnicas.xlsx")
-
+datos <- read_excel(
+  here("datos", "datos_originales", "Reporte_Cuentas_Tecnicas.xlsx")
+)
 # Defina las columnas:
 primas <- "I. Primas Imputadas, Netas de Reaseguro"
 siniestros <- "II. Siniestralidad, Neta de Reaseguro"
@@ -61,44 +67,54 @@ trimestres <- datos %>%
   ) %>%
   # Transformamos las fechas en tipo Date:
   mutate(
-    fecha = as.Date(paste(anio, trimestre * 3 - 2, 1, sep = "-"))
+    fecha = as.Date(paste(anio, trimestre * 3 - 2, 1, sep = "-")),
+    periodo = 4 * anio + trimestre
   ) %>%
   arrange(aseguradora, ramo, fecha)
 
 
-# CALCULAR LR
-datos_LR <- trimestres %>%
-  group_by(aseguradora, categoria, ramo) %>%
-  filter(
-    # Verificamos que si hayan 39 trimestres: 2017-1 a 2026-3:
-    n_distinct(anio, trimestre) == 39,
-    # FIltramos por primas positivas, y primas y siniestros sin registros nulos:
-    all(!is.na(primas_netas)),
-    all(primas_netas > 0),
-    all(!is.na(siniestros_netos))
-  ) %>%
-  ungroup() %>%
-  mutate(
-    # Nueva columna, calculando el LR = siniestros/primas:
-    loss_ratio = siniestros_netos / primas_netas
-  ) %>%
+datos_validos <- trimestres %>%
+  filter(primas_netas > 0, !is.na(siniestros_netos)) %>%
+  mutate(loss_ratio = siniestros_netos / primas_netas)
+
+primero <- min(trimestres$periodo, na.rm = TRUE)
+ultimo <- max(trimestres$periodo, na.rm = TRUE)
+n_trimestres <- ultimo - primero + 1
+if (n_trimestres < 2) {
+  stop("Se necesitan al menos dos trimestres.")
+}
+
+mejor_panel <- datos_validos[0, ]
+
+# probar primero las ventanas largas para que ganen los empates
+for (duracion in n_trimestres:2) {
+  for (inicio in primero:(ultimo - duracion + 1)) {
+    fin <- inicio + duracion - 1
+    panel <- datos_validos %>%
+      filter(periodo >= inicio, periodo <= fin) %>%
+      group_by(aseguradora, categoria, ramo) %>%
+      filter(n_distinct(periodo) == duracion, n_distinct(loss_ratio) > 1) %>%
+      ungroup()
+
+    # cada serie aporta una fila por trimestre
+    if (nrow(panel) > nrow(mejor_panel)) {
+      mejor_panel <- panel
+    }
+  }
+}
+
+
+datos_LR <- mejor_panel %>%
   select(
     anio, trimestre, fecha, aseguradora,
     categoria, ramo, primas_netas,
     siniestros_netos, loss_ratio
   )
 
-# Las series representan la cantidad de ramos-aseguradora disponibles
-# en la base de datos. Como se pueden observar, son 42.
-series <- datos_LR %>%
-  distinct(aseguradora, categoria, ramo)
 
 write_csv(
   datos_LR,
-  "datos/datos_procesados/panel_trimestral.csv"
+  here("datos", "datos_procesados", "panel_trimestral.csv")
 )
 
-write_csv(
-  series,
-  "datos/datos_procesados/series_seleccionadas.csv"
-)
+

@@ -1,4 +1,6 @@
-# Creacion de la matriz de loss ratios 
+# Ordena los LR por serie y trimestre.
+# Recibe la ruta del CSV del panel (datos/datos_procesados/panel_trimestral.csv).
+# Devuelve L con una fila por aseguradora y ramo, y una columna por trimestre.
 
 library(tidyverse)
 

@@ -6,15 +6,15 @@ library(readxl)
 library(tidyverse)
 library(here)
 
-# LEER DATOS
+# leer datos
 datos <- read_excel(
   here("datos", "datos_originales", "Reporte_Cuentas_Tecnicas.xlsx")
 )
-# Defina las columnas:
+# defina las columnas:
 primas <- "I. Primas Imputadas, Netas de Reaseguro"
 siniestros <- "II. Siniestralidad, Neta de Reaseguro"
 
-# FILTRAR LAS ENTRADAS DE PRIMAS Y SINIESTROS, AGREGAR TRIMESTRE Y TIPO
+# filtrar las entradas de primas y siniestros, agregar trimestre y tipo
 datos <- datos %>%
   rename(
     anio = `Año`,
@@ -26,7 +26,7 @@ datos <- datos %>%
     cuenta = `Cuenta`,
     monto = `Monto`
   ) %>%
-  # Aqui la idea es filtrar sobre las entradas que representan unicamente
+  # aqui la idea es filtrar sobre las entradas que representan unicamente
   # primas netas y siniestros netos
   filter(
     cuenta_madre %in% c(primas, siniestros),
@@ -34,7 +34,7 @@ datos <- datos %>%
   ) %>%
  
   mutate(
-       # Agregamos una columna para identificar trimestre
+       # agregamos una columna para identificar trimestre
       trimestre = case_when(
       trimestre_texto == "Ene-Mar" ~ 1,
       trimestre_texto == "Abr-Jun" ~ 2,
@@ -42,7 +42,7 @@ datos <- datos %>%
       trimestre_texto == "Oct-Dic" ~ 4,
       TRUE ~ NA_real_
 ),
-    # Para facilitar que representa cada entrada, agregamos otra columna para
+    # para facilitar que representa cada entrada, agregamos otra columna para
     # comprender si es una prima neta / siniestro neto
     anio = as.integer(anio),
     tipo = if_else(
@@ -52,20 +52,20 @@ datos <- datos %>%
     )
   )
 
-# ORDENAR LOS DATOS TRIMESTRALES EN ORDEN ASCENDENTE Y ORDENAR COLUMNAS
-# DE PRIMAS Y SINIESTROS
+# ordenar los datos trimestrales en orden ascendente y ordenar columnas
+# de primas y siniestros
 trimestres <- datos %>%
-  # Para construir la matriz nos interesan nada mas las siguientes columnas:
+  # para construir la matriz nos interesan nada mas las siguientes columnas:
   select(anio, trimestre, aseguradora, categoria, ramo, tipo, monto) %>%
 
-  # Como las entradas difieren las primas y los siniestros, la idea 
-  # Es trasnformar las filas, de forma que en una misma entrada 
-  # Haya una columna para primas, y otra para siniestros:
+  # como las entradas difieren las primas y los siniestros, la idea 
+  # es trasnformar las filas, de forma que en una misma entrada 
+  # haya una columna para primas, y otra para siniestros:
   pivot_wider(
     names_from = tipo,
     values_from = monto
   ) %>%
-  # Transformamos las fechas en tipo Date:
+  # transformamos las fechas en tipo date:
   mutate(
     fecha = as.Date(paste(anio, trimestre * 3 - 2, 1, sep = "-")),
     periodo = 4 * anio + trimestre

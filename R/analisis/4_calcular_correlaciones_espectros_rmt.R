@@ -18,7 +18,7 @@ q <- N / T_serie
 lambda_menos <- (1 - sqrt(q))^2
 lambda_mas <- (1 + sqrt(q))^2
 
-analizar_RMT <- function(tipo) {
+calcular_correlacion_y_espectro <- function(tipo) {
   stopifnot(tipo %in% c("p", "s"))
   metodo <- if (tipo == "p") "Pearson" else "Spearman"
   sufijo <- tolower(metodo)
@@ -30,7 +30,7 @@ analizar_RMT <- function(tipo) {
     fileEncoding = "UTF-8"
   )
 
-  espectro <- eigen((C + t(C)) / 2, symmetric = TRUE)
+  espectro <- eigen(C , symmetric = TRUE)
   lambda <- espectro$values
   V <- espectro$vectors
   rownames(V) <- rownames(C)
@@ -52,7 +52,7 @@ analizar_RMT <- function(tipo) {
   return(metodo)
 }
 
-metodos <- c(analizar_RMT("p"), analizar_RMT("s"))
+metodos <- c(calcular_correlacion_y_espectro("p"), calcular_correlacion_y_espectro("s"))
 comparacion <- data.frame(
   metodo = metodos,
   N = N,

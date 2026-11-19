@@ -26,7 +26,7 @@ curvas <- data.frame()
 for (codigo in codigos) {
   alpha <- as.numeric(codigo) / 100
   ajustados <- lambda
-  # contraer solo los autovalores hasta el borde superior de MP
+  # contraer solo los autovalores hasta el borde superior de mp
   ajustados[ruido] <- (1 - alpha) * lambda[ruido] + alpha * promedio_ruido
   A <- V %*% diag(ajustados, nrow = ncol(V)) %*% t(V)
   C <- cov2cor((A + t(A)) / 2)

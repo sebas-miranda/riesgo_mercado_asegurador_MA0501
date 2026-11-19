@@ -3,42 +3,42 @@
 # Devuelve la matriz estandarizada X.
 
 crear_X <- function(L, metodo = "pearson") {
-  #Dimension extraction
+  #dimension extraction
   N <- nrow(L)
   t <- ncol(L)
-   # Inicializar matriz dim N*t 
+   # inicializar matriz dim n*t 
   X<-matrix(NA_real_, nrow= N, ncol = t, dimnames = dimnames(L))
   
-  # REVISAR SECCION para control de atipicos
+  # revisar seccion para control de atipicos
   if(any(!is.finite(L))){
     stop(" Implementar control para estrategia de control de alores extremos u outliers")
   }
   
-  # Estandariza cada nodo 
+  # estandariza cada nodo 
   for (i in 1:N) {
-    # Extraemos la serie del LR
+    # extraemos la serie del lr
     serie <- L[i, ]
 
-    # Para la correlacion de Spearman, utilizamos los rangos
+    # para la correlacion de spearman, utilizamos los rangos
     if(metodo == "spearman"){
       serie <- rank(serie, ties.method = "average")
     }
 
     # media temporal en la fila i-esima 
     media_fil_i <- mean(serie)
-    # Desviacion estandar muestral 
+    # desviacion estandar muestral 
     sd_fila_i <- sd(serie)
     
-    # SECCION A REVISAR PARA CONTROL DE OUTLIERS EN LA  ESTANDARIZACION 
+    # seccion a revisar para control de outliers en la  estandarizacion 
     if(sd_fila_i==0){
       stop(paste('Nodo',rownames(L)[i], 'tiene sd 0'))
     }
     
-    # Estandarizar
+    # estandarizar
     X[i,] <- (serie-media_fil_i)/sd_fila_i
     
   }
-  #Devolver X estandarizado
+  #devolver x estandarizado
   
   return(X)
 }

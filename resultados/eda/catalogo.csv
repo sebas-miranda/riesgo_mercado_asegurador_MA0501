@@ -1,0 +1,43 @@
+"nodo","aseguradora","categoria","ramo","archivo","es_panel"
+1,"ASSA","Personales","Accidentes","001_ASSA_Accidentes",TRUE
+2,"ASSA","Generales","Automóvil","002_ASSA_Autom_ovil",TRUE
+4,"ASSA","Generales","Caución","004_ASSA_Cauci_on",TRUE
+5,"ASSA","Generales","Incendio y líneas aliadas","005_ASSA_Incendio_y_l_ineas_aliadas",TRUE
+8,"ASSA","Generales","Pérdidas pecuniarias","008_ASSA_P_erdidas_pecuniarias",TRUE
+9,"ASSA","Generales","Responsabilidad civil","009_ASSA_Responsabilidad_civil",TRUE
+10,"ASSA","Personales","Salud","010_ASSA_Salud",TRUE
+11,"ASSA","Generales","Vehículos marítimos","011_ASSA_Veh_iculos_mar_itimos",TRUE
+12,"ASSA","Personales","Vida","012_ASSA_Vida",TRUE
+14,"BMI","Personales","Salud","014_BMI_Salud",TRUE
+15,"BMI","Personales","Vida","015_BMI_Vida",TRUE
+21,"DAVIVIENDA","Generales","Pérdidas pecuniarias","021_DAVIVIENDA_P_erdidas_pecuniarias",TRUE
+23,"DAVIVIENDA","Personales","Vida","023_DAVIVIENDA_Vida",TRUE
+24,"INS","Personales","Accidentes","024_INS_Accidentes",TRUE
+26,"INS","Generales","Automóvil","026_INS_Autom_ovil",TRUE
+28,"INS","Generales","Caución","028_INS_Cauci_on",TRUE
+30,"INS","Generales","Incendio y líneas aliadas","030_INS_Incendio_y_l_ineas_aliadas",TRUE
+32,"INS","Generales","Otros daños a los bienes","032_INS_Otros_da_nos_a_los_bienes",TRUE
+34,"INS","Generales","Responsabilidad civil","034_INS_Responsabilidad_civil",TRUE
+35,"INS","Personales","Salud","035_INS_Salud",TRUE
+36,"INS","Generales","Seguro obligatorio de automóviles (SOA)","036_INS_Seguro_obligatorio_de_autom_oviles_SOA_",TRUE
+37,"INS","Personales","Seguro obligatorio de riesgos del trabajo (SRT)","037_INS_Seguro_obligatorio_de_riesgos_del_trabajo_SRT_",TRUE
+39,"INS","Generales","Vehículos marítimos","039_INS_Veh_iculos_mar_itimos",TRUE
+40,"INS","Personales","Vida","040_INS_Vida",TRUE
+41,"ISCR","Personales","Accidentes","041_ISCR_Accidentes",TRUE
+46,"ISCR","Generales","Otros daños a los bienes","046_ISCR_Otros_da_nos_a_los_bienes",TRUE
+49,"ISCR","Personales","Salud","049_ISCR_Salud",TRUE
+53,"ISCR","Personales","Vida","053_ISCR_Vida",TRUE
+54,"LAFISE","Generales","Automóvil","054_LAFISE_Autom_ovil",TRUE
+60,"LAFISE","Generales","Responsabilidad civil","060_LAFISE_Responsabilidad_civil",TRUE
+63,"MAGIST","Personales","Accidentes","063_MAGIST_Accidentes",TRUE
+65,"MAGIST","Personales","Vida","065_MAGIST_Vida",TRUE
+67,"MAPFRE","Generales","Automóvil","067_MAPFRE_Autom_ovil",TRUE
+77,"MAPFRE","Personales","Vida","077_MAPFRE_Vida",TRUE
+79,"MNK","Generales","Automóvil","079_MNK_Autom_ovil",TRUE
+95,"PANAM","Personales","Salud","095_PANAM_Salud",TRUE
+96,"PANAM","Personales","Vida","096_PANAM_Vida",TRUE
+97,"QUALITAS","Generales","Automóvil","097_QUALITAS_Autom_ovil",TRUE
+100,"SAGICOR","Generales","Otros daños a los bienes","100_SAGICOR_Otros_da_nos_a_los_bienes",TRUE
+101,"SAGICOR","Generales","Pérdidas pecuniarias","101_SAGICOR_P_erdidas_pecuniarias",TRUE
+103,"SAGICOR","Personales","Salud","103_SAGICOR_Salud",TRUE
+106,"SAGICOR","Personales","Vida","106_SAGICOR_Vida",TRUE

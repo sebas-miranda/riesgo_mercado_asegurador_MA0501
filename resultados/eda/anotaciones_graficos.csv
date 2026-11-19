@@ -1,0 +1,7 @@
+"serie","variable","trimestre","direccion","n","subidas","bajadas","ceros","media","mediana","desviacion","iqr","veces","texto"
+"INS - Incendio y líneas aliadas","cambio_primas",1,"sube",9,8,1,0,3078.78157354556,2152.1206915,2755.63733165518,3510.11353949,8,"T1: sube 8 de 9"
+"INS - Incendio y líneas aliadas","cambio_primas",2,"baja",10,1,9,0,-3734.688791778,-4715.27184404,2674.9753336564,2121.7582261675,9,"T2: baja 9 de 10"
+"ISCR - Vida","cambio_primas",2,"baja",10,0,10,0,-301.337154836,-275.26393402,181.217806103957,314.5499128475,10,"T2: baja 10 de 10"
+"ISCR - Vida","cambio_lr",2,"sube",10,9,1,0,17.9823920395495,14.8376981329774,22.6610331069277,23.6830694943772,9,"T2: sube 9 de 10"
+"LAFISE - Automóvil","cambio_lr",1,"sube",9,8,1,0,11.2804169973343,11.0574470062643,8.69718977976748,11.9774973461091,8,"T1: sube 8 de 9"
+"QUALITAS - Automóvil","cambio_lr",1,"baja",9,1,8,0,-5.72278432239626,-4.99822633254728,10.7898459635032,9.48703718081342,8,"T1: baja 8 de 9"

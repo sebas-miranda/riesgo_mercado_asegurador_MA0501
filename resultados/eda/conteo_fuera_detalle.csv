@@ -1,0 +1,127 @@
+"nodo","serie","variable","n_fuera"
+1,"ASSA - Accidentes","lr",0
+1,"ASSA - Accidentes","primas",0
+1,"ASSA - Accidentes","siniestros",0
+2,"ASSA - Automóvil","lr",0
+2,"ASSA - Automóvil","primas",0
+2,"ASSA - Automóvil","siniestros",0
+4,"ASSA - Caución","lr",0
+4,"ASSA - Caución","primas",0
+4,"ASSA - Caución","siniestros",0
+5,"ASSA - Incendio y líneas aliadas","lr",0
+5,"ASSA - Incendio y líneas aliadas","primas",0
+5,"ASSA - Incendio y líneas aliadas","siniestros",0
+8,"ASSA - Pérdidas pecuniarias","lr",0
+8,"ASSA - Pérdidas pecuniarias","primas",0
+8,"ASSA - Pérdidas pecuniarias","siniestros",0
+9,"ASSA - Responsabilidad civil","lr",0
+9,"ASSA - Responsabilidad civil","primas",0
+9,"ASSA - Responsabilidad civil","siniestros",0
+10,"ASSA - Salud","lr",0
+10,"ASSA - Salud","primas",0
+10,"ASSA - Salud","siniestros",0
+11,"ASSA - Vehículos marítimos","lr",2
+11,"ASSA - Vehículos marítimos","primas",0
+11,"ASSA - Vehículos marítimos","siniestros",0
+12,"ASSA - Vida","lr",0
+12,"ASSA - Vida","primas",0
+12,"ASSA - Vida","siniestros",0
+14,"BMI - Salud","lr",0
+14,"BMI - Salud","primas",0
+14,"BMI - Salud","siniestros",0
+15,"BMI - Vida","lr",0
+15,"BMI - Vida","primas",0
+15,"BMI - Vida","siniestros",0
+21,"DAVIVIENDA - Pérdidas pecuniarias","lr",1
+21,"DAVIVIENDA - Pérdidas pecuniarias","primas",0
+21,"DAVIVIENDA - Pérdidas pecuniarias","siniestros",0
+23,"DAVIVIENDA - Vida","lr",0
+23,"DAVIVIENDA - Vida","primas",0
+23,"DAVIVIENDA - Vida","siniestros",0
+24,"INS - Accidentes","lr",0
+24,"INS - Accidentes","primas",0
+24,"INS - Accidentes","siniestros",0
+26,"INS - Automóvil","lr",0
+26,"INS - Automóvil","primas",0
+26,"INS - Automóvil","siniestros",0
+28,"INS - Caución","lr",7
+28,"INS - Caución","primas",0
+28,"INS - Caución","siniestros",1
+30,"INS - Incendio y líneas aliadas","lr",1
+30,"INS - Incendio y líneas aliadas","primas",0
+30,"INS - Incendio y líneas aliadas","siniestros",1
+32,"INS - Otros daños a los bienes","lr",0
+32,"INS - Otros daños a los bienes","primas",0
+32,"INS - Otros daños a los bienes","siniestros",0
+34,"INS - Responsabilidad civil","lr",0
+34,"INS - Responsabilidad civil","primas",0
+34,"INS - Responsabilidad civil","siniestros",0
+35,"INS - Salud","lr",0
+35,"INS - Salud","primas",0
+35,"INS - Salud","siniestros",0
+36,"INS - Seguro obligatorio de automóviles (SOA)","lr",0
+36,"INS - Seguro obligatorio de automóviles (SOA)","primas",0
+36,"INS - Seguro obligatorio de automóviles (SOA)","siniestros",0
+37,"INS - Seguro obligatorio de riesgos del trabajo (SRT)","lr",0
+37,"INS - Seguro obligatorio de riesgos del trabajo (SRT)","primas",0
+37,"INS - Seguro obligatorio de riesgos del trabajo (SRT)","siniestros",0
+39,"INS - Vehículos marítimos","lr",0
+39,"INS - Vehículos marítimos","primas",0
+39,"INS - Vehículos marítimos","siniestros",0
+40,"INS - Vida","lr",0
+40,"INS - Vida","primas",0
+40,"INS - Vida","siniestros",0
+41,"ISCR - Accidentes","lr",0
+41,"ISCR - Accidentes","primas",0
+41,"ISCR - Accidentes","siniestros",0
+46,"ISCR - Otros daños a los bienes","lr",1
+46,"ISCR - Otros daños a los bienes","primas",0
+46,"ISCR - Otros daños a los bienes","siniestros",0
+49,"ISCR - Salud","lr",0
+49,"ISCR - Salud","primas",0
+49,"ISCR - Salud","siniestros",0
+53,"ISCR - Vida","lr",0
+53,"ISCR - Vida","primas",0
+53,"ISCR - Vida","siniestros",0
+54,"LAFISE - Automóvil","lr",0
+54,"LAFISE - Automóvil","primas",0
+54,"LAFISE - Automóvil","siniestros",0
+60,"LAFISE - Responsabilidad civil","lr",0
+60,"LAFISE - Responsabilidad civil","primas",0
+60,"LAFISE - Responsabilidad civil","siniestros",0
+63,"MAGIST - Accidentes","lr",0
+63,"MAGIST - Accidentes","primas",0
+63,"MAGIST - Accidentes","siniestros",0
+65,"MAGIST - Vida","lr",0
+65,"MAGIST - Vida","primas",0
+65,"MAGIST - Vida","siniestros",0
+67,"MAPFRE - Automóvil","lr",0
+67,"MAPFRE - Automóvil","primas",0
+67,"MAPFRE - Automóvil","siniestros",0
+77,"MAPFRE - Vida","lr",0
+77,"MAPFRE - Vida","primas",0
+77,"MAPFRE - Vida","siniestros",0
+79,"MNK - Automóvil","lr",2
+79,"MNK - Automóvil","primas",0
+79,"MNK - Automóvil","siniestros",0
+95,"PANAM - Salud","lr",0
+95,"PANAM - Salud","primas",0
+95,"PANAM - Salud","siniestros",0
+96,"PANAM - Vida","lr",0
+96,"PANAM - Vida","primas",0
+96,"PANAM - Vida","siniestros",0
+97,"QUALITAS - Automóvil","lr",0
+97,"QUALITAS - Automóvil","primas",0
+97,"QUALITAS - Automóvil","siniestros",0
+100,"SAGICOR - Otros daños a los bienes","lr",0
+100,"SAGICOR - Otros daños a los bienes","primas",0
+100,"SAGICOR - Otros daños a los bienes","siniestros",0
+101,"SAGICOR - Pérdidas pecuniarias","lr",0
+101,"SAGICOR - Pérdidas pecuniarias","primas",0
+101,"SAGICOR - Pérdidas pecuniarias","siniestros",0
+103,"SAGICOR - Salud","lr",0
+103,"SAGICOR - Salud","primas",0
+103,"SAGICOR - Salud","siniestros",0
+106,"SAGICOR - Vida","lr",0
+106,"SAGICOR - Vida","primas",0
+106,"SAGICOR - Vida","siniestros",0

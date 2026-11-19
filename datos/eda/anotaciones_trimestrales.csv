@@ -1,0 +1,7 @@
+serie,variable,trimestre,direccion
+INS - Incendio y líneas aliadas,cambio_primas,1,sube
+INS - Incendio y líneas aliadas,cambio_primas,2,baja
+ISCR - Vida,cambio_primas,2,baja
+ISCR - Vida,cambio_lr,2,sube
+LAFISE - Automóvil,cambio_lr,1,sube
+QUALITAS - Automóvil,cambio_lr,1,baja
